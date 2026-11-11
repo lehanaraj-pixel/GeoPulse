@@ -15,3 +15,5 @@ data/gps_*.manifest.json
 # Keep sample data
 !data/sample_gps_data.csv
 !data/sample_gps_data.manifest.json
+!data/bengaluru_test_1m.csv
+!data/bengaluru_test_1m.manifest.json
