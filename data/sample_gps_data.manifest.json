@@ -1,0 +1,175 @@
+{
+  "generator_version": "1.0.0",
+  "generated_at": "2026-11-11T10:58:24+00:00",
+  "records_written": 50000,
+  "devices_written": 162,
+  "chunks": 1,
+  "elapsed_seconds": 0.6,
+  "config": {
+    "seed": 7,
+    "target_records": 50000,
+    "num_devices": null,
+    "num_days": 7,
+    "start_date": "2026-01-05",
+    "timezone": "Asia/Kolkata",
+    "holidays": [],
+    "lat_min": 12.98,
+    "lat_max": 13.12,
+    "lon_min": 80.15,
+    "lon_max": 80.3,
+    "store_a": [
+      13.05,
+      80.22
+    ],
+    "store_b": [
+      13.053,
+      80.226
+    ],
+    "catchment_radius_m": 500.0,
+    "geography_is_placeholder": true,
+    "n_residential_zones": 14,
+    "n_workplace_zones": 8,
+    "n_other_commercial_centers": 6,
+    "n_transport_hubs": 6,
+    "hubs_near_each_store": 1,
+    "zone_share_near_stores": 0.35,
+    "near_store_radius_km": [
+      0.5,
+      3.0
+    ],
+    "hub_near_store_radius_km": [
+      0.3,
+      0.9
+    ],
+    "other_center_min_store_distance_km": 1.5,
+    "boundary_margin_km": 0.35,
+    "residential_spread_km": 0.9,
+    "workplace_spread_km": 0.45,
+    "commercial_spread_km": 0.15,
+    "store_spread_km": 0.03,
+    "hub_spread_km": 0.04,
+    "persona_shares": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "hybrid_office_days": 3,
+    "weekday_absence_prob": 0.05,
+    "transit_share": 0.45,
+    "transit_min_commute_km": 2.0,
+    "workplace_distance_decay_km": 8.0,
+    "store_customer_base_prob": 0.12,
+    "store_customer_proximity_boost": 0.5,
+    "store_distance_decay_km": 3.0,
+    "store_segment_shares": [
+      0.4,
+      0.35,
+      0.25
+    ],
+    "store_loyalty": 0.85,
+    "other_retail_decay_km": 4.0,
+    "retail_visits_per_week_median": 1.4,
+    "retail_visits_per_week_sigma": 0.55,
+    "weekday_retail_share": 0.45,
+    "weekend_retail_share": 0.55,
+    "second_retail_prob_weekday": 0.15,
+    "second_retail_prob_weekend": 0.3,
+    "weekday_leave_mean_h": 8.5,
+    "weekday_leave_device_sd_h": 0.6,
+    "weekday_leave_daily_sd_h": 0.25,
+    "work_dwell_mean_h": 8.5,
+    "work_dwell_device_sd_h": 0.5,
+    "work_dwell_daily_sd_h": 0.3,
+    "weekday_errand_window_h": [
+      10.0,
+      20.0
+    ],
+    "weekend_leave_mean_h": 12.5,
+    "weekend_leave_sd_h": 1.8,
+    "weekend_leave_bounds_h": [
+      9.0,
+      19.5
+    ],
+    "retail_dwell_median_min": 38.0,
+    "retail_dwell_sigma": 0.5,
+    "retail_dwell_bounds_min": [
+      8.0,
+      180.0
+    ],
+    "weekend_dwell_multiplier": 1.5,
+    "walk_threshold_km": 0.8,
+    "walk_speed_kmh": [
+      3.8,
+      5.2
+    ],
+    "vehicle_speed_median_kmh": 20.0,
+    "vehicle_speed_sigma": 0.25,
+    "vehicle_speed_bounds_kmh": [
+      12.0,
+      35.0
+    ],
+    "transit_speed_kmh": [
+      28.0,
+      40.0
+    ],
+    "ping_interval_seconds": 900,
+    "ping_jitter_fraction": 0.3,
+    "active_start_hour": 0.0,
+    "active_end_hour": 24.0,
+    "device_keep_prob_mean": 0.65,
+    "device_keep_prob_sd": 0.15,
+    "device_keep_prob_bounds": [
+      0.25,
+      0.95
+    ],
+    "hourly_ping_activity": [
+      0.15,
+      0.12,
+      0.1,
+      0.1,
+      0.12,
+      0.2,
+      0.6,
+      1.0,
+      1.2,
+      1.0,
+      0.9,
+      0.9,
+      1.0,
+      0.9,
+      0.9,
+      0.9,
+      1.0,
+      1.2,
+      1.2,
+      1.1,
+      1.0,
+      0.8,
+      0.5,
+      0.3
+    ],
+    "moving_ping_boost": 1.5,
+    "max_ping_keep_prob": 0.98,
+    "itinerary_end_by_hour": 23.5,
+    "gps_noise_sigma_m": 10.0,
+    "gps_outlier_prob": 0.015,
+    "gps_outlier_sigma_m": 60.0,
+    "coordinate_decimals": 6,
+    "output_path": "data/sample_gps_data.csv",
+    "chunk_device_days": 15000,
+    "validation_chunk_rows": 250000,
+    "min_devices_per_store": 20,
+    "min_devices_in_both": 5,
+    "max_plausible_speed_kmh": 150.0,
+    "overnight_hours": [
+      0,
+      6
+    ],
+    "min_overnight_share": 0.02,
+    "min_devices_with_overnight_share": 0.9,
+    "max_overnight_to_day_ratio": 0.5,
+    "commute_to_night_movement_ratio": 2.0,
+    "moving_distance_m": 150.0,
+    "moving_max_gap_s": 1800.0
+  }
+}

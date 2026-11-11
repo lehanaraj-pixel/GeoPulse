@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated datasets
+data/*_test_*.csv
+data/*_test_*.manifest.json
+data/test_*.csv
+data/test_*.manifest.json
+data/gps_*.csv
+data/gps_*.manifest.json
+
+# Keep sample data
+!data/sample_gps_data.csv
+!data/sample_gps_data.manifest.json
