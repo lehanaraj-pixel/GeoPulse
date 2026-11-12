@@ -1,0 +1,507 @@
+{
+  "metadata": {
+    "dataset_type": "synthetic_simulated_gps",
+    "generator_version": "1.0.0",
+    "generated_at": "2026-11-11T22:44:17+05:30",
+    "records_written": 1000000,
+    "devices_written": 737,
+    "processed_pings": 1000000,
+    "unique_devices": 737,
+    "start_timestamp": "2026-01-05T00:00:26+05:30",
+    "end_timestamp": "2026-02-03T23:59:56+05:30",
+    "timezone": "Asia/Kolkata",
+    "catchment_radius_m": 500.0,
+    "geography_is_placeholder": false
+  },
+  "stores": {
+    "store_a": {
+      "label": "Store A",
+      "latitude": 12.978973,
+      "longitude": 77.64527,
+      "catchment_pings": 11642,
+      "unique_devices": 441
+    },
+    "store_b": {
+      "label": "Store B",
+      "latitude": 12.979005,
+      "longitude": 77.643732,
+      "catchment_pings": 8860,
+      "unique_devices": 440
+    }
+  },
+  "overlap": {
+    "unique_devices_in_both": 425,
+    "unique_devices_union": 456,
+    "jaccard_percent": 93.2,
+    "store_a_devices_also_in_b": 96.37,
+    "store_b_devices_also_in_a": 96.59,
+    "pings_inside_both": 8167
+  },
+  "hourly": [
+    {
+      "hour": 0,
+      "label": "00:00",
+      "total_pings": 8424,
+      "average_daily_pings": 280.8,
+      "average_daily_unique_devices": 242.0,
+      "peak_daily_unique_devices": 274
+    },
+    {
+      "hour": 1,
+      "label": "01:00",
+      "total_pings": 7060,
+      "average_daily_pings": 235.33,
+      "average_daily_unique_devices": 207.0,
+      "peak_daily_unique_devices": 228
+    },
+    {
+      "hour": 2,
+      "label": "02:00",
+      "total_pings": 5741,
+      "average_daily_pings": 191.37,
+      "average_daily_unique_devices": 171.7,
+      "peak_daily_unique_devices": 194
+    },
+    {
+      "hour": 3,
+      "label": "03:00",
+      "total_pings": 5789,
+      "average_daily_pings": 192.97,
+      "average_daily_unique_devices": 174.13,
+      "peak_daily_unique_devices": 195
+    },
+    {
+      "hour": 4,
+      "label": "04:00",
+      "total_pings": 6874,
+      "average_daily_pings": 229.13,
+      "average_daily_unique_devices": 203.5,
+      "peak_daily_unique_devices": 228
+    },
+    {
+      "hour": 5,
+      "label": "05:00",
+      "total_pings": 11510,
+      "average_daily_pings": 383.67,
+      "average_daily_unique_devices": 312.17,
+      "peak_daily_unique_devices": 350
+    },
+    {
+      "hour": 6,
+      "label": "06:00",
+      "total_pings": 35024,
+      "average_daily_pings": 1167.47,
+      "average_daily_unique_devices": 623.43,
+      "peak_daily_unique_devices": 640
+    },
+    {
+      "hour": 7,
+      "label": "07:00",
+      "total_pings": 58531,
+      "average_daily_pings": 1951.03,
+      "average_daily_unique_devices": 714.7,
+      "peak_daily_unique_devices": 727
+    },
+    {
+      "hour": 8,
+      "label": "08:00",
+      "total_pings": 69659,
+      "average_daily_pings": 2321.97,
+      "average_daily_unique_devices": 728.83,
+      "peak_daily_unique_devices": 733
+    },
+    {
+      "hour": 9,
+      "label": "09:00",
+      "total_pings": 58983,
+      "average_daily_pings": 1966.1,
+      "average_daily_unique_devices": 715.0,
+      "peak_daily_unique_devices": 723
+    },
+    {
+      "hour": 10,
+      "label": "10:00",
+      "total_pings": 52251,
+      "average_daily_pings": 1741.7,
+      "average_daily_unique_devices": 701.77,
+      "peak_daily_unique_devices": 710
+    },
+    {
+      "hour": 11,
+      "label": "11:00",
+      "total_pings": 52473,
+      "average_daily_pings": 1749.1,
+      "average_daily_unique_devices": 701.43,
+      "peak_daily_unique_devices": 709
+    },
+    {
+      "hour": 12,
+      "label": "12:00",
+      "total_pings": 58405,
+      "average_daily_pings": 1946.83,
+      "average_daily_unique_devices": 713.17,
+      "peak_daily_unique_devices": 721
+    },
+    {
+      "hour": 13,
+      "label": "13:00",
+      "total_pings": 52175,
+      "average_daily_pings": 1739.17,
+      "average_daily_unique_devices": 700.87,
+      "peak_daily_unique_devices": 713
+    },
+    {
+      "hour": 14,
+      "label": "14:00",
+      "total_pings": 52403,
+      "average_daily_pings": 1746.77,
+      "average_daily_unique_devices": 701.17,
+      "peak_daily_unique_devices": 714
+    },
+    {
+      "hour": 15,
+      "label": "15:00",
+      "total_pings": 52651,
+      "average_daily_pings": 1755.03,
+      "average_daily_unique_devices": 701.57,
+      "peak_daily_unique_devices": 713
+    },
+    {
+      "hour": 16,
+      "label": "16:00",
+      "total_pings": 58621,
+      "average_daily_pings": 1954.03,
+      "average_daily_unique_devices": 713.13,
+      "peak_daily_unique_devices": 720
+    },
+    {
+      "hour": 17,
+      "label": "17:00",
+      "total_pings": 69585,
+      "average_daily_pings": 2319.5,
+      "average_daily_unique_devices": 728.8,
+      "peak_daily_unique_devices": 734
+    },
+    {
+      "hour": 18,
+      "label": "18:00",
+      "total_pings": 69217,
+      "average_daily_pings": 2307.23,
+      "average_daily_unique_devices": 726.73,
+      "peak_daily_unique_devices": 731
+    },
+    {
+      "hour": 19,
+      "label": "19:00",
+      "total_pings": 63804,
+      "average_daily_pings": 2126.8,
+      "average_daily_unique_devices": 721.6,
+      "peak_daily_unique_devices": 728
+    },
+    {
+      "hour": 20,
+      "label": "20:00",
+      "total_pings": 58021,
+      "average_daily_pings": 1934.03,
+      "average_daily_unique_devices": 712.73,
+      "peak_daily_unique_devices": 718
+    },
+    {
+      "hour": 21,
+      "label": "21:00",
+      "total_pings": 46356,
+      "average_daily_pings": 1545.2,
+      "average_daily_unique_devices": 681.03,
+      "peak_daily_unique_devices": 695
+    },
+    {
+      "hour": 22,
+      "label": "22:00",
+      "total_pings": 28984,
+      "average_daily_pings": 966.13,
+      "average_daily_unique_devices": 572.63,
+      "peak_daily_unique_devices": 588
+    },
+    {
+      "hour": 23,
+      "label": "23:00",
+      "total_pings": 17459,
+      "average_daily_pings": 581.97,
+      "average_daily_unique_devices": 424.77,
+      "peak_daily_unique_devices": 453
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-01-05",
+      "pings": 33338,
+      "unique_devices": 737,
+      "store_a_pings": 336,
+      "store_b_pings": 271,
+      "store_a_unique_devices": 111,
+      "store_b_unique_devices": 92
+    },
+    {
+      "date": "2026-01-06",
+      "pings": 33306,
+      "unique_devices": 737,
+      "store_a_pings": 353,
+      "store_b_pings": 262,
+      "store_a_unique_devices": 101,
+      "store_b_unique_devices": 88
+    },
+    {
+      "date": "2026-01-07",
+      "pings": 33446,
+      "unique_devices": 737,
+      "store_a_pings": 344,
+      "store_b_pings": 243,
+      "store_a_unique_devices": 100,
+      "store_b_unique_devices": 87
+    },
+    {
+      "date": "2026-01-08",
+      "pings": 33467,
+      "unique_devices": 737,
+      "store_a_pings": 332,
+      "store_b_pings": 252,
+      "store_a_unique_devices": 97,
+      "store_b_unique_devices": 80
+    },
+    {
+      "date": "2026-01-09",
+      "pings": 33433,
+      "unique_devices": 737,
+      "store_a_pings": 326,
+      "store_b_pings": 223,
+      "store_a_unique_devices": 94,
+      "store_b_unique_devices": 80
+    },
+    {
+      "date": "2026-01-10",
+      "pings": 33242,
+      "unique_devices": 737,
+      "store_a_pings": 626,
+      "store_b_pings": 484,
+      "store_a_unique_devices": 122,
+      "store_b_unique_devices": 118
+    },
+    {
+      "date": "2026-01-11",
+      "pings": 33379,
+      "unique_devices": 737,
+      "store_a_pings": 518,
+      "store_b_pings": 378,
+      "store_a_unique_devices": 103,
+      "store_b_unique_devices": 96
+    },
+    {
+      "date": "2026-01-12",
+      "pings": 33192,
+      "unique_devices": 737,
+      "store_a_pings": 320,
+      "store_b_pings": 252,
+      "store_a_unique_devices": 92,
+      "store_b_unique_devices": 90
+    },
+    {
+      "date": "2026-01-13",
+      "pings": 33493,
+      "unique_devices": 737,
+      "store_a_pings": 307,
+      "store_b_pings": 227,
+      "store_a_unique_devices": 87,
+      "store_b_unique_devices": 73
+    },
+    {
+      "date": "2026-01-14",
+      "pings": 33346,
+      "unique_devices": 737,
+      "store_a_pings": 325,
+      "store_b_pings": 240,
+      "store_a_unique_devices": 92,
+      "store_b_unique_devices": 85
+    },
+    {
+      "date": "2026-01-15",
+      "pings": 33492,
+      "unique_devices": 737,
+      "store_a_pings": 315,
+      "store_b_pings": 250,
+      "store_a_unique_devices": 89,
+      "store_b_unique_devices": 84
+    },
+    {
+      "date": "2026-01-16",
+      "pings": 33449,
+      "unique_devices": 737,
+      "store_a_pings": 337,
+      "store_b_pings": 262,
+      "store_a_unique_devices": 99,
+      "store_b_unique_devices": 91
+    },
+    {
+      "date": "2026-01-17",
+      "pings": 33275,
+      "unique_devices": 737,
+      "store_a_pings": 486,
+      "store_b_pings": 361,
+      "store_a_unique_devices": 108,
+      "store_b_unique_devices": 103
+    },
+    {
+      "date": "2026-01-18",
+      "pings": 33248,
+      "unique_devices": 737,
+      "store_a_pings": 616,
+      "store_b_pings": 501,
+      "store_a_unique_devices": 120,
+      "store_b_unique_devices": 112
+    },
+    {
+      "date": "2026-01-19",
+      "pings": 33308,
+      "unique_devices": 737,
+      "store_a_pings": 356,
+      "store_b_pings": 276,
+      "store_a_unique_devices": 103,
+      "store_b_unique_devices": 92
+    },
+    {
+      "date": "2026-01-20",
+      "pings": 33353,
+      "unique_devices": 737,
+      "store_a_pings": 299,
+      "store_b_pings": 217,
+      "store_a_unique_devices": 77,
+      "store_b_unique_devices": 64
+    },
+    {
+      "date": "2026-01-21",
+      "pings": 33330,
+      "unique_devices": 737,
+      "store_a_pings": 322,
+      "store_b_pings": 251,
+      "store_a_unique_devices": 98,
+      "store_b_unique_devices": 90
+    },
+    {
+      "date": "2026-01-22",
+      "pings": 33346,
+      "unique_devices": 737,
+      "store_a_pings": 318,
+      "store_b_pings": 227,
+      "store_a_unique_devices": 92,
+      "store_b_unique_devices": 79
+    },
+    {
+      "date": "2026-01-23",
+      "pings": 33269,
+      "unique_devices": 737,
+      "store_a_pings": 325,
+      "store_b_pings": 216,
+      "store_a_unique_devices": 91,
+      "store_b_unique_devices": 78
+    },
+    {
+      "date": "2026-01-24",
+      "pings": 33301,
+      "unique_devices": 737,
+      "store_a_pings": 580,
+      "store_b_pings": 452,
+      "store_a_unique_devices": 114,
+      "store_b_unique_devices": 108
+    },
+    {
+      "date": "2026-01-25",
+      "pings": 33342,
+      "unique_devices": 737,
+      "store_a_pings": 556,
+      "store_b_pings": 416,
+      "store_a_unique_devices": 101,
+      "store_b_unique_devices": 97
+    },
+    {
+      "date": "2026-01-26",
+      "pings": 33307,
+      "unique_devices": 737,
+      "store_a_pings": 323,
+      "store_b_pings": 245,
+      "store_a_unique_devices": 98,
+      "store_b_unique_devices": 88
+    },
+    {
+      "date": "2026-01-27",
+      "pings": 33302,
+      "unique_devices": 737,
+      "store_a_pings": 337,
+      "store_b_pings": 224,
+      "store_a_unique_devices": 92,
+      "store_b_unique_devices": 77
+    },
+    {
+      "date": "2026-01-28",
+      "pings": 33403,
+      "unique_devices": 737,
+      "store_a_pings": 294,
+      "store_b_pings": 249,
+      "store_a_unique_devices": 85,
+      "store_b_unique_devices": 73
+    },
+    {
+      "date": "2026-01-29",
+      "pings": 33438,
+      "unique_devices": 737,
+      "store_a_pings": 287,
+      "store_b_pings": 234,
+      "store_a_unique_devices": 97,
+      "store_b_unique_devices": 84
+    },
+    {
+      "date": "2026-01-30",
+      "pings": 33177,
+      "unique_devices": 737,
+      "store_a_pings": 302,
+      "store_b_pings": 230,
+      "store_a_unique_devices": 90,
+      "store_b_unique_devices": 74
+    },
+    {
+      "date": "2026-01-31",
+      "pings": 33224,
+      "unique_devices": 736,
+      "store_a_pings": 560,
+      "store_b_pings": 449,
+      "store_a_unique_devices": 103,
+      "store_b_unique_devices": 102
+    },
+    {
+      "date": "2026-02-01",
+      "pings": 33214,
+      "unique_devices": 736,
+      "store_a_pings": 566,
+      "store_b_pings": 444,
+      "store_a_unique_devices": 112,
+      "store_b_unique_devices": 110
+    },
+    {
+      "date": "2026-02-02",
+      "pings": 33273,
+      "unique_devices": 736,
+      "store_a_pings": 333,
+      "store_b_pings": 266,
+      "store_a_unique_devices": 99,
+      "store_b_unique_devices": 91
+    },
+    {
+      "date": "2026-02-03",
+      "pings": 33307,
+      "unique_devices": 736,
+      "store_a_pings": 343,
+      "store_b_pings": 258,
+      "store_a_unique_devices": 100,
+      "store_b_unique_devices": 82
+    }
+  ],
+  "disclaimer": "Synthetic simulated GPS pings, not real customer records. Catchment presence does not confirm a store visit or purchase. Results describe this simulation and are not real-world retail forecasts."
+}
