@@ -2,6 +2,12 @@
 
 ### Turning Mobility Data into Smarter Retail Decisions
 
+## Live Demo
+
+**Explore GeoPulse:** https://geopulse-analytics.netlify.app/
+
+---
+
 ## 1. Project Overview
 
 GeoPulse is a geospatial analytics platform designed to help retailers understand customer movement, analyze store footfall, identify high-potential retail locations, and minimize customer traffic cannibalization between nearby stores.
