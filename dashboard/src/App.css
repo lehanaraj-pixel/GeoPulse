@@ -240,3 +240,24 @@
   .store-panel { display: block; }
   .store-row { border-bottom: 1px solid #eee5d6; padding: 12px 0; }
 }
+
+/* GeoPulse interactive Leaflet map */
+.real-map {
+  width: 100%;
+  height: 390px;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 14px;
+  position: relative;
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  z-index: 1;
+}
+
+.leaflet-container {
+  font-family: inherit;
+}

@@ -8,10 +8,12 @@ from datetime import datetime
 from pathlib import Path
 
 
+GRID_CELL_SIZE_M = 250
+EARTH_RADIUS_M = 6_371_008.8
+
+
 def distance_m(lat1, lon1, lat2, lon2):
     """Calculate distance between GPS coordinates in metres."""
-    earth_radius = 6_371_008.8
-
     lat1, lat2 = math.radians(lat1), math.radians(lat2)
     delta_lat = lat2 - lat1
     delta_lon = math.radians(lon2 - lon1)
@@ -22,7 +24,7 @@ def distance_m(lat1, lon1, lat2, lon2):
         * math.sin(delta_lon / 2) ** 2
     )
 
-    return earth_radius * 2 * math.atan2(
+    return 2 * EARTH_RADIUS_M * math.atan2(
         math.sqrt(a), math.sqrt(1 - a)
     )
 
@@ -35,6 +37,21 @@ def process_data(input_path, manifest_path, output_path):
     store_a = tuple(config["store_a"])
     store_b = tuple(config["store_b"])
     radius = float(config["catchment_radius_m"])
+
+    # Approximate 250-metre grid using the dataset's central latitude.
+    bounds = config.get("bounds", {})
+    center_lat = (
+        float(bounds["lat_min"]) + float(bounds["lat_max"])
+    ) / 2 if "lat_min" in bounds and "lat_max" in bounds else (
+        store_a[0] + store_b[0]
+    ) / 2
+
+    lat_step = GRID_CELL_SIZE_M / 111_320
+    lon_step = GRID_CELL_SIZE_M / (
+        111_320 * math.cos(math.radians(center_lat))
+    )
+
+    density_cells = defaultdict(int)
 
     total_pings = 0
     all_devices = set()
@@ -65,7 +82,6 @@ def process_data(input_path, manifest_path, output_path):
     with input_path.open(
         "r", encoding="utf-8-sig", newline=""
     ) as file:
-
         reader = csv.DictReader(file)
 
         required = {"DeviceID", "Latitude", "Longitude", "Timestamp"}
@@ -85,6 +101,11 @@ def process_data(input_path, manifest_path, output_path):
 
             total_pings += 1
             all_devices.add(device)
+
+            # Aggregate GPS pings into grid cells.
+            grid_x = math.floor(lon / lon_step)
+            grid_y = math.floor(lat / lat_step)
+            density_cells[(grid_y, grid_x)] += 1
 
             if first_timestamp is None or timestamp < first_timestamp:
                 first_timestamp = timestamp
@@ -170,6 +191,16 @@ def process_data(input_path, manifest_path, output_path):
             "peak_daily_unique_devices": max(daily_unique)
         })
 
+    # Convert grid indices into geographic cell-centre coordinates.
+    density_output = []
+
+    for (grid_y, grid_x), ping_count in sorted(density_cells.items()):
+        density_output.append({
+            "latitude": round((grid_y + 0.5) * lat_step, 6),
+            "longitude": round((grid_x + 0.5) * lon_step, 6),
+            "pings": ping_count
+        })
+
     result = {
         "metadata": {
             "dataset_type": "synthetic_simulated_gps",
@@ -217,13 +248,20 @@ def process_data(input_path, manifest_path, output_path):
             ),
             "pings_inside_both": overlap_pings
         },
+        "density_grid": {
+            "cell_size_m": GRID_CELL_SIZE_M,
+            "cell_count": len(density_output),
+            "total_pings": total_pings,
+            "cells": density_output
+        },
         "hourly": hourly_output,
         "daily": daily_output,
         "disclaimer": (
             "Synthetic simulated GPS pings, not real customer records. "
-            "Catchment presence does not confirm a store visit or purchase. "
-            "Results describe this simulation and are not real-world "
-            "retail forecasts."
+            "Density cells show aggregated ping counts, not confirmed "
+            "customer visits or purchases. Catchment presence does not "
+            "confirm a store visit or purchase. Results describe this "
+            "simulation and are not real-world retail forecasts."
         )
     }
 
@@ -238,6 +276,7 @@ def process_data(input_path, manifest_path, output_path):
     print(f"Store A catchment devices: {len(store_a_devices)}")
     print(f"Store B catchment devices: {len(store_b_devices)}")
     print(f"Devices in both catchments: {overlap_count}")
+    print(f"Density grid cells: {len(density_output):,}")
     print(
         f"Overlap Jaccard: "
         f"{percentage(overlap_count, union_count)}%"

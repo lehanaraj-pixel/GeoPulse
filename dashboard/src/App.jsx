@@ -1,10 +1,12 @@
 
 import { useEffect, useState } from 'react'
 import './App.css'
+import GeoPulseMap from './GeoPulseMap'
 
 const numberFormat = new Intl.NumberFormat('en-IN')
 
-const formatNumber = (value) => numberFormat.format(Math.round(value || 0))
+const formatNumber = (value) =>
+  numberFormat.format(Math.round(value || 0))
 
 function App() {
   const [summary, setSummary] = useState(null)
@@ -17,7 +19,9 @@ function App() {
   useEffect(() => {
     fetch('/data/summary.json')
       .then((response) => {
-        if (!response.ok) throw new Error('Could not load GPS summary data.')
+        if (!response.ok) {
+          throw new Error('Could not load GPS summary data.')
+        }
         return response.json()
       })
       .then((data) => setSummary(data))
@@ -26,20 +30,39 @@ function App() {
   }, [])
 
   if (loading) {
-    return <main className="app-shell"><div className="page-content">Loading GeoPulse analytics...</div></main>
+    return (
+      <main className="app-shell">
+        <div className="page-content">Loading GeoPulse analytics...</div>
+      </main>
+    )
   }
 
   if (error || !summary) {
-    return <main className="app-shell"><div className="page-content">Data loading error: {error || 'Summary unavailable'}</div></main>
+    return (
+      <main className="app-shell">
+        <div className="page-content">
+          Data loading error: {error || 'Summary unavailable'}
+        </div>
+      </main>
+    )
   }
 
   const daily = summary.daily || []
-  const daysToShow = period === 'Today' ? 1 : period === '7 days' ? 7 : 30
+  const daysToShow =
+    period === 'Today' ? 1 : period === '7 days' ? 7 : 30
+
   const selectedDays = daily.slice(-daysToShow)
 
-  const selectedPings = selectedDays.reduce((sum, day) => sum + day.pings, 0)
+  const selectedPings = selectedDays.reduce(
+    (sum, day) => sum + day.pings,
+    0,
+  )
+
   const averageDailyDevices = selectedDays.length
-    ? selectedDays.reduce((sum, day) => sum + day.unique_devices, 0) / selectedDays.length
+    ? selectedDays.reduce(
+        (sum, day) => sum + day.unique_devices,
+        0,
+      ) / selectedDays.length
     : 0
 
   const stores = [
@@ -48,59 +71,65 @@ function App() {
       area: '500 m catchment',
       visitors: summary.stores.store_a.unique_devices,
       pings: summary.stores.store_a.catchment_pings,
-      color: '#b6f36b'
+      color: '#b6f36b',
     },
     {
       name: 'Store B',
       area: '500 m catchment',
       visitors: summary.stores.store_b.unique_devices,
       pings: summary.stores.store_b.catchment_pings,
-      color: '#ff765e'
-    }
+      color: '#ff765e',
+    },
   ]
 
   const metrics = [
     {
       label: 'SIMULATED DEVICES',
       value: formatNumber(summary.metadata.unique_devices),
-      icon: '◎',
+      icon: '◉',
       tone: 'lime',
-      footer: 'Across the full 30-day dataset'
+      footer: 'Across the full 30-day dataset',
     },
     {
       label: 'GPS PINGS',
       value: formatNumber(selectedPings),
       icon: '↗',
       tone: 'coral',
-      footer: `${period} selected period`
+      footer: `${period} selected period`,
     },
     {
       label: 'CATCHMENT OVERLAP',
       value: `${summary.overlap.jaccard_percent}%`,
-      icon: '◉',
+      icon: '◎',
       tone: 'violet',
-      footer: '500 m catchment · full dataset'
+      footer: '500 m catchment · full dataset',
     },
     {
       label: 'AVG. DAILY ACTIVE DEVICES',
       value: formatNumber(averageDailyDevices),
       icon: '◷',
       tone: 'aqua',
-      footer: `Average across ${selectedDays.length} day(s)`
-    }
+      footer: `Average across ${selectedDays.length} day(s)`,
+    },
   ]
 
   const hourly = summary.hourly || []
+
   const maxHourly = Math.max(
     ...hourly.map((item) => item.average_daily_unique_devices),
-    1
+    1,
   )
+
   const peakHour = hourly.reduce(
     (peak, item) =>
-      item.average_daily_unique_devices > peak.average_daily_unique_devices
+      item.average_daily_unique_devices >
+      peak.average_daily_unique_devices
         ? item
         : peak,
-    hourly[0] || { label: '--', average_daily_unique_devices: 0 }
+    hourly[0] || {
+      label: '--',
+      average_daily_unique_devices: 0,
+    },
   )
 
   return (
@@ -109,22 +138,37 @@ function App() {
         <div className="brand">
           <div className="brand-mark">G</div>
           <div>
-            <strong>GeoPulse<span>.</span></strong>
+            <strong>
+              GeoPulse<span>.</span>
+            </strong>
             <small>SPATIAL INTELLIGENCE</small>
           </div>
         </div>
 
         <div className="workspace-label">WORKSPACE</div>
+
         <nav>
-          {['Overview', 'Mobility map', 'Store analytics', 'Catchment zones', 'Cannibalization'].map((item, i) => (
+          {[
+            'Overview',
+            'Mobility map',
+            'Store analytics',
+            'Catchment zones',
+            'Cannibalization',
+          ].map((item, i) => (
             <button
               key={item}
-              className={`nav-item ${activeNav === item ? 'active' : ''}`}
+              className={`nav-item ${
+                activeNav === item ? 'active' : ''
+              }`}
               onClick={() => setActiveNav(item)}
             >
-              <span className="nav-icon">{['◎', '⌖', '▥', '◉', '⇄'][i]}</span>
+              <span className="nav-icon">
+                {['◉', '⌖', '▥', '◎', '⇄'][i]}
+              </span>
               {item}
-              {item === 'Mobility map' && <span className="nav-tag">DATA</span>}
+              {item === 'Mobility map' && (
+                <span className="nav-tag">DATA</span>
+              )}
             </button>
           ))}
         </nav>
@@ -137,6 +181,7 @@ function App() {
               <small>1M GPS pings loaded</small>
             </div>
           </div>
+
           <div className="profile">
             <div className="avatar">GP</div>
             <div>
@@ -153,9 +198,14 @@ function App() {
           <div className="breadcrumb">
             Workspace <span>/</span> <strong>{activeNav}</strong>
           </div>
+
           <div className="top-actions">
-            <span className="live-indicator"><i /> DATA CONNECTED</span>
-            <button className="icon-button" aria-label="Notifications">♧</button>
+            <span className="live-indicator">
+              <i /> DATA CONNECTED
+            </span>
+            <button className="icon-button" aria-label="Notifications">
+              ♧
+            </button>
             <div className="top-avatar">R</div>
           </div>
         </header>
@@ -163,13 +213,22 @@ function App() {
         <div className="page-content">
           <section className="welcome-row">
             <div>
-              <div className="eyebrow"><span /> RETAIL MOBILITY INTELLIGENCE</div>
-              <h1>See the city<span>.</span><br />Find your next <em>move.</em></h1>
+              <div className="eyebrow">
+                <span /> RETAIL MOBILITY INTELLIGENCE
+              </div>
+
+              <h1>
+                See the city<span>.</span>
+                <br />
+                Find your next <em>move.</em>
+              </h1>
+
               <p className="subtitle">
-                Understand footfall patterns, discover high-potential locations,
-                and make every store count.
+                Understand footfall patterns, discover high-potential
+                locations, and make every store count.
               </p>
             </div>
+
             <div className="period-picker">
               {['Today', '7 days', '30 days'].map((item) => (
                 <button
@@ -185,12 +244,17 @@ function App() {
 
           <section className="metrics-grid">
             {metrics.map((metric) => (
-              <article className={`metric-card ${metric.tone}`} key={metric.label}>
+              <article
+                className={`metric-card ${metric.tone}`}
+                key={metric.label}
+              >
                 <div className="metric-top">
                   <span>{metric.label}</span>
                   <span className="metric-icon">{metric.icon}</span>
                 </div>
+
                 <div className="metric-value">{metric.value}</div>
+
                 <div className="metric-footer">
                   <strong>{metric.footer}</strong>
                 </div>
@@ -202,58 +266,48 @@ function App() {
             <div className="section-heading">
               <div>
                 <div className="eyebrow">THE BIG PICTURE</div>
-                <h2>Mobility <em>landscape</em></h2>
+                <h2>
+                  Mobility <em>landscape</em>
+                </h2>
               </div>
-              <button className="outline-button" onClick={() => setActiveNav('Mobility map')}>
+
+              <button
+                className="outline-button"
+                onClick={() => setActiveNav('Mobility map')}
+              >
                 ⌖ Explore map
               </button>
             </div>
 
             <div className="map-layout">
               <div className="map-canvas">
-                <div className="map-grid" />
-                <svg
-                  className="map-art"
-                  viewBox="0 0 900 440"
-                  preserveAspectRatio="xMidYMid slice"
-                  aria-label="Illustrative map, not geospatially plotted"
-                >
-                  <g className="roads">
-                    <path d="M-30 95 L220 145 L430 80 L680 150 L940 75" />
-                    <path d="M-20 260 L180 205 L390 275 L600 215 L940 300" />
-                    <path d="M130 -20 L210 150 L170 310 L260 470" />
-                    <path d="M390 -20 L430 80 L390 275 L470 470" />
-                    <path d="M690 -20 L680 150 L720 290 L680 470" />
-                    <path d="M-20 380 L180 205 L430 80 L600 -20" />
-                    <path d="M220 145 L390 275 L600 215 L810 400" />
-                  </g>
-                  <g className="minor-roads">
-                    <path d="M40 170 L300 220 L510 165 L850 230" />
-                    <path d="M300 0 L320 160 L290 440" />
-                    <path d="M550 0 L530 180 L570 440" />
-                    <path d="M0 330 L250 310 L490 350 L900 330" />
-                  </g>
-                  <g className="map-zones">
-                    <circle cx="250" cy="165" r="88" fill="#b6f36b" />
-                    <circle cx="585" cy="220" r="104" fill="#9b83ff" />
-                  </g>
-                  <g className="map-points">
-                    <circle cx="250" cy="165" r="13" />
-                    <circle cx="585" cy="220" r="13" />
-                  </g>
-                </svg>
-
-                <div className="map-label label-one"><i /> STORE A</div>
-                <div className="map-label label-two"><i /> STORE B</div>
+                <GeoPulseMap
+                  summary={summary}
+                  selectedLayer={selectedLayer}
+                />
 
                 <div className="map-legend">
-                  <span><i className="legend-lime" /> Store A</span>
-                  <span><i className="legend-violet" /> Store B</span>
+                  <span>
+                    <i className="legend-violet" /> GPS density
+                  </span>
+                  <span>
+                    <i className="legend-lime" /> Store A
+                  </span>
+                  <span>
+                    <i
+                      className="legend-lime"
+                      style={{ background: '#d58a2a' }}
+                    />{' '}
+                    Store B
+                  </span>
                 </div>
 
                 <div className="map-layer-control">
                   <small>MAP LAYER</small>
-                  <select value={selectedLayer} onChange={(e) => setSelectedLayer(e.target.value)}>
+                  <select
+                    value={selectedLayer}
+                    onChange={(e) => setSelectedLayer(e.target.value)}
+                  >
                     <option>Footfall density</option>
                     <option>Store catchments</option>
                     <option>Visitor overlap</option>
@@ -261,29 +315,40 @@ function App() {
                 </div>
 
                 <div className="map-disclaimer">
-                  Illustrative map · Coordinates not plotted to scale
+                  Aggregated simulated GPS ping density · 250 m grid
                 </div>
               </div>
 
               <aside className="store-panel">
                 <div className="panel-heading">
-                  <div><small>LOCATION PERFORMANCE</small><h3>Store pulse</h3></div>
+                  <div>
+                    <small>LOCATION PERFORMANCE</small>
+                    <h3>Store pulse</h3>
+                  </div>
                   <span>···</span>
                 </div>
 
                 {stores.map((store) => (
                   <div className="store-row" key={store.name}>
-                    <span className="store-dot" style={{ background: store.color }} />
+                    <span
+                      className="store-dot"
+                      style={{ background: store.color }}
+                    />
+
                     <div className="store-info">
                       <strong>{store.name}</strong>
                       <small>{store.area}</small>
                     </div>
-                    <strong className="store-visitors">{formatNumber(store.visitors)}</strong>
+
+                    <strong className="store-visitors">
+                      {formatNumber(store.visitors)}
+                    </strong>
                   </div>
                 ))}
 
                 <div className="store-note">
-                  <span>↗</span> Unique devices detected in each catchment
+                  <span>↗</span> Unique simulated devices detected in
+                  each catchment
                 </div>
               </aside>
             </div>
@@ -292,7 +357,10 @@ function App() {
           <section className="bottom-grid">
             <article className="analytics-card">
               <div className="card-heading">
-                <div><small>HOURLY ACTIVITY</small><h3>When the city moves</h3></div>
+                <div>
+                  <small>HOURLY ACTIVITY</small>
+                  <h3>When the city moves</h3>
+                </div>
                 <span>24 HOURS · DAILY AVERAGE</span>
               </div>
 
@@ -300,7 +368,8 @@ function App() {
                 {hourly.map((item) => {
                   const height = Math.max(
                     3,
-                    (item.average_daily_unique_devices / maxHourly) * 100
+                    (item.average_daily_unique_devices / maxHourly) *
+                      100,
                   )
 
                   return (
@@ -310,14 +379,20 @@ function App() {
                         style={{ height: `${height}%` }}
                         title={`${item.label}: ${item.average_daily_unique_devices} average daily devices`}
                       />
-                      <small>{item.hour % 2 === 0 ? item.label.slice(0, 2) : ''}</small>
+                      <small>
+                        {item.hour % 2 === 0
+                          ? item.label.slice(0, 2)
+                          : ''}
+                      </small>
                     </div>
                   )
                 })}
               </div>
 
               <div className="chart-caption">
-                <span><i /> Average daily unique devices by hour</span>
+                <span>
+                  <i /> Average daily unique devices by hour
+                </span>
                 <strong>Peak: {peakHour.label}</strong>
               </div>
             </article>
@@ -325,11 +400,17 @@ function App() {
             <article className="opportunity-card">
               <div className="opportunity-icon">✳</div>
               <small>LOCATION OPPORTUNITY</small>
-              <h3>Find the next<br /><em>high-street hotspot.</em></h3>
+              <h3>
+                Find the next
+                <br />
+                <em>high-street hotspot.</em>
+              </h3>
+
               <p>
-                Combine visitor density, store catchments and mobility patterns
-                to evaluate promising retail locations.
+                Combine visitor density, store catchments and mobility
+                patterns to evaluate promising retail locations.
               </p>
+
               <button onClick={() => setActiveNav('Catchment zones')}>
                 Explore catchments <span>↗</span>
               </button>
@@ -338,12 +419,12 @@ function App() {
 
           <footer className="footer">
             <span>GEOPULSE © 2026 · RETAIL MOBILITY ANALYTICS</span>
-            <span>SYNTHETIC GPS DATA · {summary.metadata.timezone}</span>
+            <span>
+              SYNTHETIC GPS DATA · {summary.metadata.timezone}
+            </span>
           </footer>
 
-          <p className="subtitle">
-            {summary.disclaimer}
-          </p>
+          <p className="subtitle">{summary.disclaimer}</p>
         </div>
       </section>
     </main>
