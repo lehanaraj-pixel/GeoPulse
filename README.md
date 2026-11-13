@@ -1,6 +1,12 @@
-﻿# GeoPulse ΓÇô Hyper-Local Retail Mobility Analytics
+# GeoPulse – Hyper-Local Retail Mobility Analytics
 
 ### Turning Mobility Data into Smarter Retail Decisions
+
+## Live Demo
+
+**Explore GeoPulse:** https://geopulse-analytics.netlify.app/
+
+---
 
 ## 1. Project Overview
 
@@ -219,37 +225,37 @@ For example, if analysis indicates that a proposed location could intercept 30% 
 
 | Timeline | Planned Activities |
 |---|---|
-| 10ΓÇô16 November | Repository setup, synthetic GPS data generation, Snowflake setup |
-| 17ΓÇô23 November | Spatial joins, catchment analysis, dbt transformations, initial dashboard |
-| 24ΓÇô30 November | Cannibalization analysis, business analytics, dashboard integration |
-| 1ΓÇô9 December | Airflow automation, advanced visualizations, testing, documentation, final demonstration |
+| 10–16 November | Repository setup, synthetic GPS data generation, Snowflake setup |
+| 17–23 November | Spatial joins, catchment analysis, dbt transformations, initial dashboard |
+| 24–30 November | Cannibalization analysis, business analytics, dashboard integration |
+| 1–9 December | Airflow automation, advanced visualizations, testing, documentation, final demonstration |
 
 ## 12. Proposed Repository Structure
 
 ```text
 GeoPulse/
-Γöé
-Γö£ΓöÇΓöÇ data/
-Γöé   Γö£ΓöÇΓöÇ raw/
-Γöé   ΓööΓöÇΓöÇ processed/
-Γöé
-Γö£ΓöÇΓöÇ src/
-Γöé   Γö£ΓöÇΓöÇ data_generation/
-Γöé   ΓööΓöÇΓöÇ spatial_processing/
-Γöé
-Γö£ΓöÇΓöÇ dbt/
-Γöé
-Γö£ΓöÇΓöÇ dashboard/
-Γöé
-Γö£ΓöÇΓöÇ airflow/
-Γöé
-Γö£ΓöÇΓöÇ tests/
-Γöé
-Γö£ΓöÇΓöÇ docs/
-Γöé
-Γö£ΓöÇΓöÇ .gitignore
-Γö£ΓöÇΓöÇ README.md
-ΓööΓöÇΓöÇ requirements.txt
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── src/
+│   ├── data_generation/
+│   └── spatial_processing/
+│
+├── dbt/
+│
+├── dashboard/
+│
+├── airflow/
+│
+├── tests/
+│
+├── docs/
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
 *The repository structure may evolve as the implementation progresses.*
