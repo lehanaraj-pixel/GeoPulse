@@ -7,6 +7,11 @@ const numberFormat = new Intl.NumberFormat('en-IN')
 
 const formatNumber = (value) =>
   numberFormat.format(Math.round(Number(value) || 0))
+const formatDecimal = (value) =>
+  new Intl.NumberFormat('en-IN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value) || 0)
 
 const formatDate = (date) =>
   new Date(`${date}T00:00:00`).toLocaleDateString('en-IN', {
@@ -364,7 +369,7 @@ function App() {
         <MetricCard
           label="AVG. DAILY ACTIVE DEVICES"
           value={formatNumber(averageDailyDevices)}
-          footer={`Average across ${selectedDays.length} day(s)`}
+          footer={`${formatDecimal(averageDailyDevices)} average · ${selectedDays.length} days`}
           tone="aqua"
         />
       </section>
