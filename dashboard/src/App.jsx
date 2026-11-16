@@ -189,33 +189,62 @@ function App() {
           selectedLayer={layer}
         />
 
-        <div className="map-legend">
-          <span>
-            <i className="legend-violet" /> GPS density
-          </span>
-          <span>
-            <i className="legend-lime" /> Store A
-          </span>
-          <span>
-            <i
-              className="legend-lime"
-              style={{ background: '#d58a2a' }}
-            />{' '}
-            Store B
-          </span>
-        </div>
+        
+<div className="map-legend">
+  {selectedLayer === 'Opportunity zones' ? (
+    <>
+      <span>
+        <i
+          className="legend-lime"
+          style={{ background: '#e6a23c' }}
+        />{' '}
+        Top opportunity cells
+      </span>
+      <span>
+        <i className="legend-lime" /> Store A
+      </span>
+      <span>
+        <i
+          className="legend-lime"
+          style={{ background: '#d58a2a' }}
+        />{' '}
+        Store B
+      </span>
+    </>
+  ) : (
+    <>
+      <span>
+        <i className="legend-violet" /> GPS density
+      </span>
+      <span>
+        <i className="legend-lime" /> Store A
+      </span>
+      <span>
+        <i
+          className="legend-lime"
+          style={{ background: '#d58a2a' }}
+        />{' '}
+        Store B
+      </span>
+    </>
+  )}
+</div>
 
-        <div className="map-layer-control">
-          <small>MAP LAYER</small>
-          <select
-            value={selectedLayer}
-            onChange={(event) => setSelectedLayer(event.target.value)}
-          >
-            <option>Footfall density</option>
-            <option>Store catchments</option>
-            <option>Visitor overlap</option>
-          </select>
-        </div>
+
+        
+<div className="map-layer-control">
+  <small>MAP LAYER</small>
+  <select
+    value={selectedLayer}
+    onChange={(event) => setSelectedLayer(event.target.value)}
+  >
+    <option>Footfall density</option>
+    <option>Store catchments</option>
+    <option>Visitor overlap</option>
+    <option>Opportunity zones</option>
+  </select>
+</div>
+
 
         <div className="map-disclaimer">
           Aggregated simulated GPS ping density · 250 m grid

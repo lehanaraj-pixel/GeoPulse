@@ -158,10 +158,44 @@
 .legend-lime { background: #b6f36b; }
 .legend-violet { background: #9b83ff; }
 .legend-coral { background: #ff765e; }
-.map-layer-control { position: absolute; right: 14px; top: 14px; background: #17152ddd; padding: 10px; border-radius: 10px; display: grid; gap: 6px; }
-.map-layer-control small { color: #aaa5be; font-size: 8px; letter-spacing: 1px; }
-.map-layer-control select { color: white; background: transparent; border: 0; font-size: 10px; outline: none; }
-.map-layer-control option { color: #17152d; }
+.map-layer-control {
+  position: absolute;
+  z-index: 1000;
+  right: 14px;
+  top: 14px;
+  min-width: 175px;
+  background: #17152d;
+  padding: 12px;
+  border: 1px solid #ffffff45;
+  border-radius: 12px;
+  display: grid;
+  gap: 8px;
+  box-shadow: 0 4px 16px #0005;
+}
+
+.map-layer-control small {
+  color: #b6f36b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.map-layer-control select {
+  width: 100%;
+  color: #ffffff;
+  background: #302d4b;
+  border: 1px solid #77718e;
+  border-radius: 7px;
+  padding: 9px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.map-layer-control select option {
+  color: #17152d;
+  background: #ffffff;
+}
 .map-disclaimer { position: absolute; bottom: 17px; right: 15px; color: #d1cde0; font-size: 8px; }
 
 .store-panel { background: #fffaf1; border-radius: 20px; padding: 20px 16px; box-shadow: 5px 6px 0 #17152d0c; }
