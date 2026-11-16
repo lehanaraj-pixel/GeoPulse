@@ -17,3 +17,6 @@ data/gps_*.manifest.json
 !data/sample_gps_data.manifest.json
 !data/bengaluru_test_1m.csv
 !data/bengaluru_test_1m.manifest.json
+
+# Generated spatial analysis outputs
+data/processed/
