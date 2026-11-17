@@ -105,6 +105,37 @@ function App() {
 
   const storeA = summary.stores.store_a
   const storeB = summary.stores.store_b
+  const getDistanceMeters = (lat1, lon1, lat2, lon2) => {
+  const rad = Math.PI / 180
+  const dLat = (lat2 - lat1) * rad
+  const dLon = (lon2 - lon1) * rad
+
+  const value =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * rad) *
+      Math.cos(lat2 * rad) *
+      Math.sin(dLon / 2) ** 2
+
+  return 6371008.8 * 2 *
+    Math.atan2(Math.sqrt(value), Math.sqrt(1 - value))
+}
+
+const opportunityLocations = (summary.density_grid?.cells || [])
+  .map((cell) => {
+    const distanceA = getDistanceMeters(
+      Number(cell.latitude), Number(cell.longitude),
+      Number(storeA.latitude), Number(storeA.longitude)
+    )
+    const distanceB = getDistanceMeters(
+      Number(cell.latitude), Number(cell.longitude),
+      Number(storeB.latitude), Number(storeB.longitude)
+    )
+
+    return { ...cell, distanceA, distanceB }
+  })
+  .filter((cell) => cell.distanceA > 500 && cell.distanceB > 500)
+  .sort((a, b) => Number(b.pings) - Number(a.pings))
+  .slice(0, 15)
   const overlap = summary.overlap
 
   const stores = [
@@ -247,7 +278,7 @@ function App() {
 
 
         <div className="map-disclaimer">
-          Aggregated simulated GPS ping density · 250 m grid
+          Aggregated simulated GPS ping density | 250 m grid
         </div>
       </div>
     </div>
@@ -409,12 +440,50 @@ function App() {
           title={<>Mobility <em>landscape</em></>}
         />
 
-        {mapPanel()}
-        <div style={{ marginTop: '16px' }}>
-          {storePanel}
-        </div>
-      </section>
+       {mapPanel()}
 
+<article className="analytics-card" style={{ marginTop: '16px', overflowX: 'auto' }}>
+  <div className="card-heading">
+    <div>
+      <small>LOCATION OPPORTUNITY</small>
+      <h3>Top 15 potential locations</h3>
+    </div>
+    <span>OUTSIDE BOTH 500 M CATCHMENTS</span>
+  </div>
+
+  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>GPS pings</th>
+        <th>Store A</th>
+        <th>Store B</th>
+      </tr>
+    </thead>
+    <tbody>
+      {opportunityLocations.map((cell, index) => (
+        <tr key={`${cell.latitude}-${cell.longitude}`}>
+          <td>{index + 1}</td>
+          <td>{Number(cell.latitude).toFixed(5)}</td>
+          <td>{Number(cell.longitude).toFixed(5)}</td>
+          <td>{formatNumber(cell.pings)}</td>
+          <td>{formatNumber(Math.round(cell.distanceA))} m</td>
+          <td>{formatNumber(Math.round(cell.distanceB))} m</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <p style={{ fontSize: '11px', marginTop: '10px' }}>
+    Ranked by simulated GPS pings. These indicate simulated activity, not confirmed customer visits or demand.
+  </p>
+</article>
+
+<div style={{ marginTop: '16px' }}>
+  {storePanel}
+</div>
       <section className="bottom-grid">
         <article className="analytics-card">
           <div className="card-heading">
@@ -475,6 +544,7 @@ function App() {
             Explore catchments <span>↗</span>
           </button>
         </article>
+      </section>
       </section>
     </>
   )
