@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import GeoPulseMap from './GeoPulseMap'
+import { rankOpportunityLocations } from './opportunityScoring'
 
 const numberFormat = new Intl.NumberFormat('en-IN')
 
@@ -105,37 +106,11 @@ function App() {
 
   const storeA = summary.stores.store_a
   const storeB = summary.stores.store_b
-  const getDistanceMeters = (lat1, lon1, lat2, lon2) => {
-  const rad = Math.PI / 180
-  const dLat = (lat2 - lat1) * rad
-  const dLon = (lon2 - lon1) * rad
-
-  const value =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * rad) *
-      Math.cos(lat2 * rad) *
-      Math.sin(dLon / 2) ** 2
-
-  return 6371008.8 * 2 *
-    Math.atan2(Math.sqrt(value), Math.sqrt(1 - value))
-}
-
-const opportunityLocations = (summary.density_grid?.cells || [])
-  .map((cell) => {
-    const distanceA = getDistanceMeters(
-      Number(cell.latitude), Number(cell.longitude),
-      Number(storeA.latitude), Number(storeA.longitude)
-    )
-    const distanceB = getDistanceMeters(
-      Number(cell.latitude), Number(cell.longitude),
-      Number(storeB.latitude), Number(storeB.longitude)
-    )
-
-    return { ...cell, distanceA, distanceB }
-  })
-  .filter((cell) => cell.distanceA > 500 && cell.distanceB > 500)
-  .sort((a, b) => Number(b.pings) - Number(a.pings))
-  .slice(0, 15)
+  const opportunityLocations = rankOpportunityLocations(
+  summary.density_grid?.cells || [],
+  [Number(storeA.latitude), Number(storeA.longitude)],
+  [Number(storeB.latitude), Number(storeB.longitude)],
+)
   const overlap = summary.overlap
 
   const stores = [
@@ -458,8 +433,11 @@ const opportunityLocations = (summary.density_grid?.cells || [])
         <th>Latitude</th>
         <th>Longitude</th>
         <th>GPS pings</th>
-        <th>Store A</th>
-        <th>Store B</th>
+<th>Footfall Score</th>
+<th>Separation Score</th>
+<th>Opportunity Score</th>
+<th>Store A</th>
+<th>Store B</th>
       </tr>
     </thead>
     <tbody>
@@ -469,15 +447,18 @@ const opportunityLocations = (summary.density_grid?.cells || [])
           <td>{Number(cell.latitude).toFixed(5)}</td>
           <td>{Number(cell.longitude).toFixed(5)}</td>
           <td>{formatNumber(cell.pings)}</td>
-          <td>{formatNumber(Math.round(cell.distanceA))} m</td>
-          <td>{formatNumber(Math.round(cell.distanceB))} m</td>
+          <td>{formatDecimal(cell.footfallScore)}</td>
+<td>{formatDecimal(cell.separationScore)}</td>
+<td><strong>{formatDecimal(cell.opportunityScore)}</strong></td>
+<td>{formatNumber(cell.distanceA)} m</td>
+<td>{formatNumber(cell.distanceB)} m</td>
         </tr>
       ))}
     </tbody>
   </table>
 
   <p style={{ fontSize: '11px', marginTop: '10px' }}>
-    Ranked by simulated GPS pings. These indicate simulated activity, not confirmed customer visits or demand.
+    Ranked using a heuristic 70:30 combination of normalized simulated GPS ping density (footfall) and distance from the nearest existing store (separation). GPS pings represent simulated activity, not confirmed customer visits or demand.
   </p>
 </article>
 

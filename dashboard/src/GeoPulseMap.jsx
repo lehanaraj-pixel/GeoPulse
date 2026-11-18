@@ -9,6 +9,7 @@ import {
   useMap,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import { rankOpportunityLocations } from './opportunityScoring'
 
 function FitMap({ points }) {
   const map = useMap()
@@ -47,68 +48,11 @@ export default function GeoPulseMap({ summary, selectedLayer }) {
   const showOverlap = selectedLayer === 'Visitor overlap'
   const showOpportunities = selectedLayer === 'Opportunity zones'
 
-  // Calculate distance between two geographic coordinates.
-  const getDistanceMeters = (lat1, lon1, lat2, lon2) => {
-    const toRad = Math.PI / 180
-    const dLat = (lat2 - lat1) * toRad
-    const dLon = (lon2 - lon1) * toRad
-
-    const value =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(lat1 * toRad) *
-        Math.cos(lat2 * toRad) *
-        Math.sin(dLon / 2) ** 2
-
-    return (
-      2 *
-      6371008.8 *
-      Math.atan2(Math.sqrt(value), Math.sqrt(1 - value))
-    )
-  }
-
-  // Identify grid cells outside both existing 500 m catchments.
-  const opportunityCells =
+  // Rank opportunity zones using the shared 70:30 scoring model.
+  const topOpportunities =
     a && b
-      ? cells
-          .map((cell) => {
-            const latitude = Number(cell.latitude)
-            const longitude = Number(cell.longitude)
-
-            const distanceA = getDistanceMeters(
-              latitude,
-              longitude,
-              a[0],
-              a[1],
-            )
-
-            const distanceB = getDistanceMeters(
-              latitude,
-              longitude,
-              b[0],
-              b[1],
-            )
-            return {
-  ...cell,
-  exactDistanceA: distanceA,
-  exactDistanceB: distanceB,
-  distanceA: Math.round(distanceA),
-  distanceB: Math.round(distanceB),
-  nearestDistance: Math.round(
-    Math.min(distanceA, distanceB),
-  ),
-}
-          })
-          .filter(
-  (cell) =>
-    cell.exactDistanceA > 500 && cell.exactDistanceB > 500,
-)
+      ? rankOpportunityLocations(cells, a, b)
       : []
-  
-
-  // Display the 15 highest-activity opportunity cells.
-  const topOpportunities = [...opportunityCells]
-    .sort((x, y) => Number(y.pings) - Number(x.pings))
-    .slice(0, 15)
 
   const points = [...(a ? [a] : []), ...(b ? [b] : [])]
 
@@ -199,6 +143,12 @@ export default function GeoPulseMap({ summary, selectedLayer }) {
                 <br />
                 {Number(cell.pings).toLocaleString()} simulated GPS pings
                 <br />
+<strong>Footfall Score:</strong> {cell.footfallScore.toFixed(2)}/100
+<br />
+<strong>Separation Score:</strong> {cell.separationScore.toFixed(2)}/100
+<br />
+<strong>Opportunity Score:</strong> {cell.opportunityScore.toFixed(2)}/100
+<br />
                 Distance from Store A: {cell.distanceA.toLocaleString()} m
                 <br />
                 Distance from Store B: {cell.distanceB.toLocaleString()} m
