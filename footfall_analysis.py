@@ -1,6 +1,8 @@
 
 """GeoPulse: Hourly and daily mobility activity analysis."""
 
+import time
+
 from pathlib import Path
 
 import pandas as pd
@@ -11,14 +13,27 @@ OUTPUT_DIR = BASE_DIR / "data" / "processed"
 
 
 def load_data():
+    """Load GPS data and measure the dataset loading time."""
+
+    start_time = time.perf_counter()
+
     df = pd.read_csv(DATA_PATH)
 
     df["Timestamp"] = pd.to_datetime(
-        df["Timestamp"], utc=True
+        df["Timestamp"],
+        utc=True
     ).dt.tz_convert("Asia/Kolkata")
 
-    return df
+    end_time = time.perf_counter()
 
+    loading_time = end_time - start_time
+
+    print("\n--- DATA LOADING BENCHMARK ---")
+    print(f"Records loaded: {len(df):,}")
+    print(f"Columns loaded: {len(df.columns)}")
+    print(f"Loading time: {loading_time:.2f} seconds")
+
+    return df
 
 def analyze_footfall(df):
     df["date"] = df["Timestamp"].dt.date
