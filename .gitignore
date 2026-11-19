@@ -1,0 +1,9 @@
+# Local GPS dataset (large raw file)
+data/bengaluru_test_1m.csv
+
+# Temporary generated output
+data/summary_rebuilt_test.json
+
+# Python cache
+__pycache__/
+*.py[cod]
