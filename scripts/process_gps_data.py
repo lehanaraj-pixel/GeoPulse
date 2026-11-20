@@ -1,4 +1,4 @@
-
+﻿
 import argparse
 import csv
 import json
@@ -10,6 +10,32 @@ from pathlib import Path
 
 GRID_CELL_SIZE_M = 250
 EARTH_RADIUS_M = 6_371_008.8
+
+def validate_gps_row(row):
+    device = (row.get("DeviceID") or "").strip()
+    if not device:
+        return None, "missing_device_id"
+
+    try:
+        lat = float(row.get("Latitude", ""))
+        lon = float(row.get("Longitude", ""))
+    except (ValueError, TypeError):
+        return None, "invalid_coordinates"
+
+    if not math.isfinite(lat) or not math.isfinite(lon):
+        return None, "invalid_coordinates"
+
+    if not -90 <= lat <= 90 or not -180 <= lon <= 180:
+        return None, "coordinates_out_of_range"
+
+    try:
+        timestamp = datetime.fromisoformat(
+            (row.get("Timestamp") or "").strip()
+        )
+    except (ValueError, TypeError):
+        return None, "invalid_timestamp"
+
+    return (device, lat, lon, timestamp), None
 
 
 def distance_m(lat1, lon1, lat2, lon2):
@@ -90,12 +116,18 @@ def process_data(input_path, manifest_path, output_path):
                 f"CSV must contain these columns: {sorted(required)}"
             )
 
-        for row in reader:
-            device = row["DeviceID"]
-            lat = float(row["Latitude"])
-            lon = float(row["Longitude"])
-            timestamp = datetime.fromisoformat(row["Timestamp"])
+        invalid_rows = 0
+        rejected_reasons = defaultdict(int)
 
+        for row in reader:
+            validated, error = validate_gps_row(row)
+
+            if error:
+                invalid_rows += 1
+                rejected_reasons[error] += 1
+                continue
+
+            device, lat, lon, timestamp = validated
             date_key = timestamp.date().isoformat()
             hour = timestamp.hour
 
@@ -147,7 +179,14 @@ def process_data(input_path, manifest_path, output_path):
                 print(f"Processed {total_pings:,} pings")
 
     if total_pings == 0:
-        raise ValueError("The CSV contains no GPS records.")
+        raise ValueError(
+            f"No valid GPS records found. Rejected rows: {invalid_rows}."
+        )
+
+    if invalid_rows:
+        print(f"Rejected GPS rows: {invalid_rows:,}")
+        for reason, count in sorted(rejected_reasons.items()):
+            print(f"  {reason}: {count:,}")
 
     overlap_count = len(store_a_devices & store_b_devices)
     union_count = len(store_a_devices | store_b_devices)
