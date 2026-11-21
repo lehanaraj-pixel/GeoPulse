@@ -257,6 +257,11 @@ def process_data(input_path, manifest_path, output_path):
                 "geography_is_placeholder", True
             )
         },
+        "validation": {
+            "valid_rows": total_pings,
+            "rejected_rows": invalid_rows,
+            "rejection_reasons": dict(rejected_reasons)
+        },
         "stores": {
             "store_a": {
                 "label": "Store A",
