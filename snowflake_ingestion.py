@@ -85,7 +85,7 @@ def validate_gps_batch(batch):
     if not longitude.between(-180, 180).all():
         raise ValueError("Invalid longitude values")
 
-        # 6. Validate timestamp parsing
+    # 6. Validate timestamp parsing
     timestamps = batch["Timestamp"].astype("string")
 
     parsed_timestamps = pd.to_datetime(
