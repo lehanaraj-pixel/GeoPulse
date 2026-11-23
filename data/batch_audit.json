@@ -1,0 +1,38 @@
+[
+    {
+        "batch_number": 1,
+        "rows_processed": 2,
+        "unique_devices": 1,
+        "min_latitude": 12.9716,
+        "max_latitude": 12.9716,
+        "min_longitude": 77.5946,
+        "max_longitude": 77.5946,
+        "start_timestamp": "2026-01-05T10:00:00+05:30",
+        "end_timestamp": "2026-01-05T10:00:00+05:30",
+        "status": "SUCCESS"
+    },
+    {
+        "batch_number": 2,
+        "rows_processed": 2,
+        "unique_devices": 1,
+        "min_latitude": 12.9716,
+        "max_latitude": 12.9716,
+        "min_longitude": 77.5946,
+        "max_longitude": 77.5946,
+        "start_timestamp": "2026-01-05T10:00:00+05:30",
+        "end_timestamp": "2026-01-05T10:00:00+05:30",
+        "status": "SUCCESS"
+    },
+    {
+        "batch_number": 3,
+        "rows_processed": 1,
+        "unique_devices": 1,
+        "min_latitude": 12.9716,
+        "max_latitude": 12.9716,
+        "min_longitude": 77.5946,
+        "max_longitude": 77.5946,
+        "start_timestamp": "2026-01-05T10:00:00+05:30",
+        "end_timestamp": "2026-01-05T10:00:00+05:30",
+        "status": "SUCCESS"
+    }
+]
