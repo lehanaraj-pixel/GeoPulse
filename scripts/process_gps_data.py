@@ -212,6 +212,7 @@ def process_data(input_path, manifest_path, output_path):
     total_days = len(daily)
 
     for hour in range(24):
+# Include every recorded date so hours with no activity count as zero in the daily average.
         daily_unique = [
             len(hourly_devices.get((date_key, hour), set()))
             for date_key in daily
