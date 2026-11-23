@@ -194,12 +194,11 @@ CREATE OR REPLACE FILE FORMAT geopulse_csv
 CREATE OR REPLACE STAGE geopulse_stage FILE_FORMAT = geopulse_csv;
 
 -- 2) Upload from SnowSQL (Windows path example), then load into a raw table
-PUT file://C:/path/to/GeoPulse_Data_Engineering/data/gps_1m.csv @geopulse_stage AUTO_COMPRESS=TRUE;
+PUT file://<absolute-path-to-repo>/data/bengaluru_test_1m.csv @geopulse_stage AUTO_COMPRESS=TRUE;
 
 CREATE OR REPLACE TABLE raw_gps_pings (
   device_id VARCHAR(20), latitude FLOAT, longitude FLOAT, ts_text VARCHAR(32));
-COPY INTO raw_gps_pings FROM @geopulse_stage/gps_1m.csv.gz;
-
+COPY INTO raw_gps_pings FROM @geopulse_stage/bengaluru_test_1m.csv.gz;
 -- 3) Typed table with GEOGRAPHY points (note: longitude first)
 CREATE OR REPLACE TABLE gps_pings AS
 SELECT device_id,
@@ -212,6 +211,56 @@ FROM raw_gps_pings;
 SELECT COUNT(DISTINCT device_id)
 FROM gps_pings
 WHERE ST_DWITHIN(geo_point, ST_MAKEPOINT(<STORE_A_LON>, <STORE_A_LAT>), 500);
+
+
+-- 5) Distinct devices within each store's 500 m catchment
+WITH stores AS (
+    SELECT column1 AS store_id,
+           column2 AS longitude,
+           column3 AS latitude,
+           ST_MAKEPOINT(column2, column3) AS geo_point
+    FROM VALUES
+        ('STORE_A', <STORE_A_LON>, <STORE_A_LAT>),
+        ('STORE_B', <STORE_B_LON>, <STORE_B_LAT>)
+)
+SELECT
+    s.store_id,
+    COUNT(DISTINCT g.device_id) AS unique_devices
+FROM stores s
+JOIN gps_pings g
+    ON ST_DWITHIN(g.geo_point, s.geo_point, 500)
+GROUP BY s.store_id
+ORDER BY s.store_id;
+
+
+-- 6) Devices appearing in multiple store catchments
+WITH stores AS (
+    SELECT column1 AS store_id,
+           ST_MAKEPOINT(column2, column3) AS geo_point
+    FROM VALUES
+        ('STORE_A', <STORE_A_LON>, <STORE_A_LAT>),
+        ('STORE_B', <STORE_B_LON>, <STORE_B_LAT>)
+)
+SELECT
+    g.device_id,
+    COUNT(DISTINCT s.store_id) AS catchments_entered
+FROM gps_pings g
+JOIN stores s
+    ON ST_DWITHIN(g.geo_point, s.geo_point, 500)
+GROUP BY g.device_id
+HAVING COUNT(DISTINCT s.store_id) > 1
+ORDER BY catchments_entered DESC;
+
+
+-- 7) Hourly mobility patterns
+SELECT
+    DATE_TRUNC('HOUR', ts) AS hour,
+    COUNT(*) AS total_pings,
+    COUNT(DISTINCT device_id) AS unique_devices
+FROM gps_pings
+GROUP BY DATE_TRUNC('HOUR', ts)
+ORDER BY hour;
+
 ```
 
 Preparation tips: validate the file with `validate_data.py` first; the file is sorted by device then time, so it can be loaded
