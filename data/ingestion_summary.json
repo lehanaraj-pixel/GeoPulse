@@ -1,0 +1,7 @@
+{
+    "source_file": "data/bengaluru_test_1m.csv",
+    "batch_size": 100000,
+    "total_rows_loaded": 1000000,
+    "total_batches_loaded": 10,
+    "status": "SUCCESS"
+}

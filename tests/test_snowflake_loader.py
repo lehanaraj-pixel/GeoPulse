@@ -1,8 +1,14 @@
 
+import json
+
 import pandas as pd
 import pytest
 
-from snowflake_loader import MockSnowflakeLoader, run_mock_ingestion
+from snowflake_loader import (
+    MockSnowflakeLoader,
+    run_mock_ingestion,
+    save_ingestion_report
+)
 
 
 def create_valid_batch(rows=2):
@@ -67,9 +73,37 @@ def test_run_mock_ingestion(tmp_path):
 
     source_data.to_csv(csv_path, index=False)
 
-    result = run_mock_ingestion(csv_path, batch_size=2)
-
+    result = run_mock_ingestion(
+        csv_path,
+        batch_size=2,
+        report_path=tmp_path / "ingestion_summary.json"
+    )
     assert result == {
+        "source_file": str(csv_path),
+        "batch_size": 2,
         "total_rows_loaded": 5,
-        "total_batches_loaded": 3
+        "total_batches_loaded": 3,
+        "status": "SUCCESS"
     }
+
+
+def test_save_ingestion_report(tmp_path):
+    report = {
+        "source_file": "gps_test.csv",
+        "batch_size": 100,
+        "total_rows_loaded": 500,
+        "total_batches_loaded": 5,
+        "status": "SUCCESS"
+    }
+
+    output_path = tmp_path / "ingestion_summary.json"
+
+    saved_path = save_ingestion_report(report, output_path)
+
+    assert saved_path == output_path
+    assert output_path.exists()
+
+    with output_path.open("r", encoding="utf-8") as file:
+        saved_report = json.load(file)
+
+    assert saved_report == report
