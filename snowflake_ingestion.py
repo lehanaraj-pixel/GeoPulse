@@ -30,6 +30,9 @@ def read_gps_batches(file_path, batch_size=100_000):
     if not file_path.exists():
         raise FileNotFoundError(f"CSV file not found: {file_path}")
 
+    if not isinstance(batch_size, int) or isinstance(batch_size, bool):
+        raise TypeError("Batch size must be an integer")
+
     if batch_size <= 0:
         raise ValueError("Batch size must be greater than zero")
 

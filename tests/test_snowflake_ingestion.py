@@ -110,3 +110,20 @@ def test_timestamp_without_timezone(valid_batch):
 
     with pytest.raises(ValueError, match="timezone offset"):
         validate_gps_batch(valid_batch)
+
+@pytest.mark.parametrize("batch_size", [1.5, "100", True, None])
+def test_non_integer_batch_size(batch_size):
+    with pytest.raises(TypeError, match="must be an integer"):
+        next(read_gps_batches(
+            "data/bengaluru_test_1m.csv",
+            batch_size=batch_size
+        ))
+
+
+@pytest.mark.parametrize("batch_size", [0, -1])
+def test_non_positive_batch_size(batch_size):
+    with pytest.raises(ValueError, match="greater than zero"):
+        next(read_gps_batches(
+            "data/bengaluru_test_1m.csv",
+            batch_size=batch_size
+        ))
