@@ -317,7 +317,7 @@ function App() {
       >
         <thead>
           <tr>
-            {['Date', 'Store A pings', 'Store B pings', 'Store A devices', 'Store B devices'].map(
+            {['Date', 'Store A pings', 'Store B pings', 'Store A unique devices', 'Store B unique devices'].map(
               (heading) => (
                 <th
                   key={heading}
