@@ -1,0 +1,21 @@
+{
+    "source_file": "data/bengaluru_test_1m.csv",
+    "batch_size": 100000,
+    "total_records_processed": 1000000,
+    "total_batches_processed": 10,
+    "valid_batches": 10,
+    "invalid_batches": 0,
+    "unique_devices": 737,
+    "geographic_bounds": {
+        "min_latitude": 12.94,
+        "max_latitude": 13.02,
+        "min_longitude": 77.6,
+        "max_longitude": 77.69
+    },
+    "timestamp_coverage": {
+        "start": "2026-01-04 18:30:26+00:00",
+        "end": "2026-02-03 18:29:56+00:00"
+    },
+    "validation_failures": {},
+    "status": "SUCCESS"
+}

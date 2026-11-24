@@ -1,6 +1,8 @@
 import re
+import json
 from pathlib import Path
 import pandas as pd
+from pandas.errors import EmptyDataError
 
 
 REQUIRED_COLUMNS = [
@@ -36,17 +38,23 @@ def read_gps_batches(file_path, batch_size=100_000):
     if batch_size <= 0:
         raise ValueError("Batch size must be greater than zero")
 
-    for batch in pd.read_csv(
-        file_path,
-        chunksize=batch_size,
-        dtype={
-            "DeviceID": "string",
-            "Latitude": "float64",
-            "Longitude": "float64",
-            "Timestamp": "string"
-        }
-    ):
-        yield batch
+    try:
+        for batch in pd.read_csv(
+            file_path,
+            chunksize=batch_size,
+            dtype={
+                "DeviceID": "string",
+                "Latitude": "float64",
+                "Longitude": "float64",
+                "Timestamp": "string"
+            }
+        ):
+            yield batch
+
+    except EmptyDataError as error:
+        raise ValueError(
+            f"GPS CSV file is empty: {file_path}"
+        ) from error
 
 
 def validate_gps_batch(batch):
@@ -123,3 +131,103 @@ def prepare_gps_batch(batch):
     ).copy()
 
     return prepared
+def generate_ingestion_diagnostics(
+    file_path,
+    batch_size=100_000,
+    output_path=None
+):
+    """Generate a JSON diagnostics report for GPS data ingestion."""
+
+    total_records = 0
+    total_batches = 0
+    valid_batches = 0
+    invalid_batches = 0
+
+    failure_reasons = {}
+    unique_devices = set()
+
+    min_latitude = float("inf")
+    max_latitude = float("-inf")
+    min_longitude = float("inf")
+    max_longitude = float("-inf")
+
+    earliest_timestamp = None
+    latest_timestamp = None
+
+    for batch in read_gps_batches(file_path, batch_size):
+        total_batches += 1
+        total_records += len(batch)
+
+        try:
+            validate_gps_batch(batch)
+        except ValueError as error:
+            invalid_batches += 1
+            reason = str(error)
+            failure_reasons[reason] = (
+                failure_reasons.get(reason, 0) + 1
+            )
+            continue
+
+        valid_batches += 1
+
+        unique_devices.update(
+            batch["DeviceID"].astype(str).unique()
+        )
+
+        latitude = pd.to_numeric(batch["Latitude"])
+        longitude = pd.to_numeric(batch["Longitude"])
+
+        min_latitude = min(min_latitude, latitude.min())
+        max_latitude = max(max_latitude, latitude.max())
+        min_longitude = min(min_longitude, longitude.min())
+        max_longitude = max(max_longitude, longitude.max())
+
+        timestamps = pd.to_datetime(
+            batch["Timestamp"], utc=True
+        )
+
+        batch_start = timestamps.min()
+        batch_end = timestamps.max()
+
+        if earliest_timestamp is None or batch_start < earliest_timestamp:
+            earliest_timestamp = batch_start
+
+        if latest_timestamp is None or batch_end > latest_timestamp:
+            latest_timestamp = batch_end
+
+    has_valid_data = valid_batches > 0
+
+    diagnostics = {
+        "source_file": str(file_path),
+        "batch_size": batch_size,
+        "total_records_processed": total_records,
+        "total_batches_processed": total_batches,
+        "valid_batches": valid_batches,
+        "invalid_batches": invalid_batches,
+        "unique_devices": len(unique_devices),
+        "geographic_bounds": {
+            "min_latitude": min_latitude if has_valid_data else None,
+            "max_latitude": max_latitude if has_valid_data else None,
+            "min_longitude": min_longitude if has_valid_data else None,
+            "max_longitude": max_longitude if has_valid_data else None
+        },
+        "timestamp_coverage": {
+            "start": str(earliest_timestamp) if has_valid_data else None,
+            "end": str(latest_timestamp) if has_valid_data else None
+        },
+        "validation_failures": failure_reasons,
+        "status": (
+            "NO_DATA" if total_records == 0
+            else "SUCCESS" if invalid_batches == 0
+            else "COMPLETED_WITH_ERRORS"
+        )
+    }
+
+    if output_path is not None:
+        output_file = Path(output_path)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_file, "w", encoding="utf-8") as file:
+            json.dump(diagnostics, file, indent=4)
+
+    return diagnostics
